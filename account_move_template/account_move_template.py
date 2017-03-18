@@ -20,8 +20,8 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api
-from openerp.exceptions import ValidationError
+from odoo import models, fields, api
+from odoo.exceptions import ValidationError
 
 
 class AccountMoveTemplate(models.Model):
@@ -30,28 +30,12 @@ class AccountMoveTemplate(models.Model):
 
     @api.model
     def _company_get(self):
-        return self.env['res.company']._company_default_get(
-            object='account.move.template'
-        )
+        return self.env['res.company']._company_default_get(object='account.move.template')
 
-    company_id = fields.Many2one(
-        comodel_name='res.company',
-        string='Company',
-        required=True,
-        change_default=True,
-        default=_company_get,
-    )
-    template_line_ids = fields.One2many(
-        comodel_name='account.move.template.line',
-        inverse_name='template_id',
-        string='Template Lines'
-    )
+    company_id = fields.Many2one(comodel_name='res.company',string='Company',required=True,change_default=True,default=_company_get,)
+    template_line_ids = fields.One2many(comodel_name='account.move.template.line',inverse_name='template_id',string='Template Lines')
     cross_journals = fields.Boolean(string='Cross-Journals')
-    transitory_acc_id = fields.Many2one(
-        comodel_name='account.account',
-        string='Transitory account',
-        required=False
-    )
+    transitory_acc_id = fields.Many2one(comodel_name='account.account',string='Transitory account',required=False)
 
     @api.constrains('journal_id')
     def _check_different_journal(self):
@@ -81,35 +65,12 @@ class AccountMoveTemplateLine(models.Model):
     _name = 'account.move.template.line'
     _inherit = 'account.document.template.line'
 
-    journal_id = fields.Many2one(
-        comodel_name='account.journal',
-        string='Journal',
-        required=True
-    )
-    account_id = fields.Many2one(
-        comodel_name='account.account',
-        string='Account',
-        required=True,
-        ondelete="cascade"
-    )
-    move_line_type = fields.Selection(
-        [('cr', 'Credit'), ('dr', 'Debit')],
-        string='Move Line Type',
-        required=True
-    )
-    analytic_account_id = fields.Many2one(
-        comodel_name='account.analytic.account',
-        string='Analytic Account',
-        ondelete="cascade"
-    )
-    template_id = fields.Many2one(
-        comodel_name='account.move.template',
-        string='Template'
-    )
-    account_tax_id = fields.Many2one(
-        comodel_name='account.tax',
-        string='Tax'
-    )
+    journal_id = fields.Many2one(comodel_name='account.journal',string='Journal',required=True )
+    account_id = fields.Many2one(comodel_name='account.account',string='Account',required=True,ondelete="cascade")
+    move_line_type = fields.Selection([('cr', 'Credit'), ('dr', 'Debit')], string='Move Line Type', required=True)
+    analytic_account_id = fields.Many2one(comodel_name='account.analytic.account',string='Analytic Account',ondelete="cascade")
+    template_id = fields.Many2one(comodel_name='account.move.template',string='Template')
+    account_tax_id = fields.Many2one(comodel_name='account.tax',string='Tax')
 
     _sql_constraints = [
         ('sequence_template_uniq', 'unique (template_id,sequence)',
