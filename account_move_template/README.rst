@@ -35,5 +35,6 @@ Authors:
 Contributors:
 ~~~~~~~~~~~~~
 
+* Jalal ZAHID <j.zahid@auriumtechnologies.com> (Port to v10)
 * Alex Comba <alex.comba@agilebg.com> (Port to V8)
 * Guewen Baconnier <guewen.baconnier@camptocamp.com>
